@@ -1,7 +1,15 @@
+// Since the LoginForm thwarted my last attempt at getting this challenge operational
+// We'll take extra caution in getting it set up here.
+
 // see SignupForm.js for comments
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
+// Import useMutation from react hook and LOGIN_USER from mutations
+import { useMutation } from '@apollo/react-hooks';
+import { LOGIN_USER } from '../utils/mutations';
+
+// Deleted this in my last attempt. Since we had issues logging in, do not touch this
 import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 
@@ -9,6 +17,8 @@ const LoginForm = () => {
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  // Like last attempt, call the loginUser and connect it to the mutation
+  const [loginUser] = useMutation(LOGIN_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -26,15 +36,25 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await loginUser(userFormData);
+      // Replace the loginUser() functionality imported from the API file with the LOGIN_USER mutation functionality.
+      // const response = await loginUser(userFormData);
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
+      // Here's a pun from my last attempt
+      // TRYing something new! Get it?
+      const { data } = await loginUser ({
+        variables: { ...userFormData }
+      })
+
+      // Tired of seeing something went wrong.
+      if (err) {
+        throw new Error('Uh-oh, something broke... again!');
       }
 
-      const { token, user } = await response.json();
-      console.log(user);
-      Auth.login(token);
+      // Commented out last time, toggle back and forth if it needs to be removed or not
+      // const { token, user } = await response.json();
+      console.log(data.user);
+      // Auth.login(data.login.token);
+      Auth.login(data.addUser.token); 
     } catch (err) {
       console.error(err);
       setShowAlert(true);
