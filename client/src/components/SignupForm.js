@@ -5,7 +5,8 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_USER } from '../utils/mutations';
 
-import { createUser } from '../utils/API';
+// Not deleting this, will comment it out just in-case I need to revert anything.
+// import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
 
 const SignupForm = () => {
