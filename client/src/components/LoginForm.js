@@ -10,7 +10,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { LOGIN_USER } from '../utils/mutations';
 
 // Deleted this in my last attempt. Since we had issues logging in, do not touch this
-import { loginUser } from '../utils/API';
+// import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 
 const LoginForm = () => {
@@ -46,9 +46,9 @@ const LoginForm = () => {
       })
 
       // Tired of seeing something went wrong.
-      if (err) {
-        throw new Error('Uh-oh, something broke... again!');
-      }
+      //   if (!response.ok) {
+      //     throw new Error('something went wrong!');
+      //   }
 
       // Commented out last time, toggle back and forth if it needs to be removed or not
       // const { token, user } = await response.json();
