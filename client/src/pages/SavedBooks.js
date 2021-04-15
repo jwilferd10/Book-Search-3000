@@ -1,40 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 
-import { getMe, deleteBook } from '../utils/API';
+// Use the Apollo useMutation() Hook to execute the SAVE_BOOK mutation in the handleSaveBook() function instead of the saveBook() function imported from the API file.
+// And make sure you keep the logic for saving the book's ID to state in the try...catch block.
+// Import the apollo/react hooks from mutation and query
+import { useQuery, useMutation } from '@apollo/react-hooks';
+
+// Import GET_ME from queries, REMOVE_BOOK from mutations
+import { GET_ME } from '../utils/queries';
+import { REMOVE_BOOK } from '../utils/mutations';
+
+// import { getMe, deleteBook } from '../utils/API';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
+// Reminder: Just comment out the unused code, easier to reflect on past actions
 const SavedBooks = () => {
-  const [userData, setUserData] = useState({});
+  // Commented out for now
+  // const [userData, setUserData] = useState({});
 
   // use this to determine if `useEffect()` hook needs to run again
-  const userDataLength = Object.keys(userData).length;
+  // const userDataLength = Object.keys(userData).length;
 
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const token = Auth.loggedIn() ? Auth.getToken() : null;
+  // Create a const for loading and data, connected to our GETME query
+  const { loading, data } = useQuery(GET_ME);
 
-        if (!token) {
-          return false;
-        }
+  // Const userData and tether it to me
+  const userData = data?.me || {};
 
-        const response = await getMe(token);
+  // Create state for removing books connected to our mutations
+  const [removeBook, { error } ] = useMutation(REMOVE_BOOK);
 
-        if (!response.ok) {
-          throw new Error('something went wrong!');
-        }
-
-        const user = await response.json();
-        setUserData(user);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getUserData();
-  }, [userDataLength]);
+  // Use the useMutation() Hook to execute the REMOVE_BOOK mutation in the handleDeleteBook() function instead of the deleteBook() function that's imported from API file. 
+  // Make sure you keep the removeBookId() function in place!
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
@@ -45,23 +43,23 @@ const SavedBooks = () => {
     }
 
     try {
-      const response = await deleteBook(bookId, token);
+      const { data } = await removeBook ({
+        variables: { bookId },
+      })
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
+      if (error) {
+        throw new Error('something went wrong!')
       }
 
-      const updatedUser = await response.json();
-      setUserData(updatedUser);
       // upon success, remove book's id from localStorage
-      removeBookId(bookId);
+      removeBookId(bookId); 
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   };
 
-  // if data isn't here yet, say so
-  if (!userDataLength) {
+  // If data isn't here yet, say so
+  if (loading) {
     return <h2>LOADING...</h2>;
   }
 
@@ -101,3 +99,28 @@ const SavedBooks = () => {
 };
 
 export default SavedBooks;
+
+  // useEffect(() => {
+  //   const getUserData = async () => {
+  //     try {
+  //       const token = Auth.loggedIn() ? Auth.getToken() : null;
+
+  //       if (!token) {
+  //         return false;
+  //       }
+
+  //       const response = await getMe(token);
+
+  //       if (!response.ok) {
+  //         throw new Error('something went wrong!');
+  //       }
+
+  //       const user = await response.json();
+  //       setUserData(user);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+
+  //   getUserData();
+  // }, [userDataLength]);
