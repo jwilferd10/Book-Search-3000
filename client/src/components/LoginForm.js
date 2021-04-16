@@ -52,9 +52,9 @@ const LoginForm = () => {
 
       // Commented out last time, toggle back and forth if it needs to be removed or not
       // const { token, user } = await response.json();
-      console.log(data.user);
+      const { token } = data?.login;
       // Auth.login(data.login.token);
-      Auth.login(data.addUser.token); 
+      Auth.login(token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
