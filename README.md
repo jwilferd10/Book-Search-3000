@@ -1,10 +1,10 @@
 # 📚📚 Book Search Engine 3000 📚📚
 
-**Live Deployment:** https://tranquil-wave-08798.herokuapp.com/
+:computer: **Live Deployment:** https://tranquil-wave-08798.herokuapp.com/
 
-**Github Repo:** https://github.com/jwilferd10/Book-Search-3000
+:computer: **Github Repo:** https://github.com/jwilferd10/Book-Search-3000
 
-## Table of Contents :
+## :open_file_folder: Table of Contents :
   - [Preview](#camera-preview)
   - [Description](#description)
   - [User Story](#book-user-story)
